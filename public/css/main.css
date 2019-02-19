@@ -1,0 +1,46 @@
+.box2{
+
+
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+  color: #4a4a4a;
+  display: block;
+  padding: 1.25rem;
+  width:100%;
+
+}
+.box2:hover{
+  box-shadow:  0 4px 3px rgba(10, 10, 10, 0.164), 0 0 0 1px rgba(10, 10, 10, 0.288);
+}
+.box3{
+
+  
+    background:linear-gradient(to top right,rgba(7, 80, 197, 0.904),rgba(228, 61, 61, 0.692));
+  transition:.5s;
+  box-shadow: 0 2px 3px rgba(70, 66, 66, 0.685), 0 0 0 1px rgba(116, 103, 103, 0.575);
+  
+color:rgba(5, 20, 66, 0.76);
+}
+.box3:hover{
+
+  color:rgb(225, 65, 65);
+
+}
+body{
+
+  transition:.5s;
+
+}
+@media screen and (max-height: 600px){
+  #inbox{
+    margin-top:60px;
+    width:100%;
+  }
+}
+.p-links{
+  padding:20px;
+}
+.notification .is-dan{
+  background:linear-gradient(to top right,rgba(228, 61, 61, 0.842),rgba(29, 66, 124, 0.815));
+}
