@@ -40,10 +40,12 @@
         "classmap": [
             "database/seeds",
             "database/factories",
-            "app/Imap.php"
+            "app/Imap.php",
+            "app/UnseenMessg.php"
         ],
         "files": [
-            "app/Imap.php"
+            "app/Imap.php",
+            "app/UnseenMessg.php"
         ]
     },
     "autoload-dev": {
