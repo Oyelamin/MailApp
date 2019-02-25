@@ -34,13 +34,13 @@ class UnseenMessgController extends Controller
         rsort($inboxs['data']);
         // dd($inboxs);
         foreach($inboxs['data'] as $inbox){
-            // dd($inbox);
             
             $subject= $inbox['subject'];
             $message= $inbox['message'];
             $date= $inbox['date'];
             $from_address= $inbox['from']['address'];
             $from_name= $inbox['from']['name'];
+            $attachment= count($inbox['attachments']);
             
             
            Unseen::create([
@@ -51,17 +51,18 @@ class UnseenMessgController extends Controller
 
                'fro' => $from_address,
 
-               'date' => $date
+               'fro_name' => $from_name,
+
+               'date' => $date,
+
+               'attachment' => $attachment
 
            ]);
         //    return dd("SAVED!!!");
-           
-       
-           
          
         }
 
-        $mess_inbox = DB::table('unseens')->orderBy('id','asc')->groupBy('subject')->paginate(2);
+        $mess_inbox = DB::table('unseens')->orderBy('id','asc')->groupBy('subject')->paginate(30);
             // $inboxs= DB::select("SELECT * FROM `inboxes` GROUP BY `subject` ORDER BY `id` DESC");
             
         return view('mail.unseen')->with('mess_inbox',$mess_inbox);
@@ -95,9 +96,9 @@ class UnseenMessgController extends Controller
      * @param  \App\UnseemM  $unseemM
      * @return \Illuminate\Http\Response
      */
-    public function show(UnseemM $unseemM)
+    public function show(Unseen $unseen)
     {
-        //
+        return view('mail.unseenMessg.show')->with('unseen',$unseen);
     }
 
     /**

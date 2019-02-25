@@ -17,8 +17,10 @@ class CreateInboxesTable extends Migration
             $table->increments('id');
             $table->string('subject');
             $table->string('fro');
+            $table->string('fro_name');
             $table->text('body');
             $table->string('date');
+            $table->string('attachment');
             $table->timestamps();
         });
     }

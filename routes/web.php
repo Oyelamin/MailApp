@@ -14,6 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/mail','MailController@index');
-Route::get('/mail/list','MailController@show');
+// Route::get('/mail','MailController@index');
+// Route::get('/mail/list','MailController@show');
 Route::resource('mail/unseen','UnseenMessgController');
+Route::resource('mail','MailController');

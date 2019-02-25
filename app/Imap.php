@@ -27,11 +27,14 @@ class Imap {
     private $errors = array();
     private $attachments = array();
     private $attachments_dir = 'attachments/';
+    
 
     public function connect($hostname, $username, $password) {
         $connection = imap_open($hostname, $username, $password) or die('Cannot connect to Mail: ' . imap_last_error());
         if (!preg_match("/Resource.id.*/", (string) $connection)) {
+
             return $connection; //return error message
+            
         }
         $this->imapStream = $connection;
         return true;

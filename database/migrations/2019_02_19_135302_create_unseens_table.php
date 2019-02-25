@@ -17,7 +17,9 @@ class CreateUnseensTable extends Migration
             $table->increments('id');
             $table->string('subject');
             $table->string('fro');
+            $table->string('fro_name');
             $table->text('body');
+            $table->text('attachment');
             $table->string('date');
             $table->timestamps();
         });

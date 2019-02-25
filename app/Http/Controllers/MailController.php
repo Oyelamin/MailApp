@@ -33,16 +33,16 @@ class MailController extends Controller
 
         }
         // dd($inboxs['data']);
-        rsort($inboxs['data']);
+        // rsort($inboxs['data']);
         // dd($inboxs);
         foreach($inboxs['data'] as $inbox){
-            // dd($inbox);
             
             $subject= $inbox['subject'];
             $message= $inbox['message'];
             $date= $inbox['date'];
             $from_address= $inbox['from']['address'];
             $from_name= $inbox['from']['name'];
+            $attachment= count($inbox['attachments']);
             
             
            Inbox::create([
@@ -53,17 +53,16 @@ class MailController extends Controller
 
                'fro' => $from_address,
 
-               'date' => $date
+               'fro_name'  => $from_name,
+
+               'date' => $date,
+
+               'attachment' => $attachment
 
            ]);
-        //    return dd("SAVED!!!");
-           
-       
-           
-         
-        }
 
-        $mess_inbox = DB::table('inboxes')->orderBy('id','asc')->groupBy('subject')->paginate(2);
+        }
+        $mess_inbox = DB::table('inboxes')->orderBy('id','desc')->groupBy('subject')->paginate(30);
             // $inboxs= DB::select("SELECT * FROM `inboxes` GROUP BY `subject` ORDER BY `id` DESC");
             
         return view('mail.index')->with('mess_inbox',$mess_inbox);
@@ -98,16 +97,16 @@ class MailController extends Controller
      * @param  \App\Mail  $mail
      * @return \Illuminate\Http\Response
      */
-    public function show(DB $db)
+    public function show(Inbox $inbox)
     {
-        // $tst= DB::select("SELECT * FROM inboxes");
-        // dd($tst);
-            $inboxs = DB::table('inboxes')->orderBy('id','desc')->groupBy('subject')->paginate(2);
-            // $inboxs= DB::select("SELECT * FROM `inboxes` GROUP BY `subject` ORDER BY `id` DESC");
-            
-            return view('mail.index')->with('inboxs',$inboxs);
+        $url= $_SERVER['REQUEST_URI'];
+        $id= trim($url,'/mail');
+        $inbox= DB::table('inboxes')->where('id', $id)->first();
+        return view('mail.show')->with('inbox',$inbox);
            
     }
+
+
 
     /**
      * Show the form for editing the specified resource.
@@ -143,3 +142,6 @@ class MailController extends Controller
         //
     }
 }
+/**
+ * IBEJU 1, IBEJU 2, ORIMEDU 1, ORIMEDU 2, ORIMEDU 3, IWEREKUN 1, IWEREKUN 2, LEKKI 1,LEKKI 2, SIRIWON/IGBEKODO 1, SIRIWON/IGBEKODO 3
+ */
