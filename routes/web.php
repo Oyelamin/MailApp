@@ -18,3 +18,5 @@ Route::get('/', function () {
 // Route::get('/mail/list','MailController@show');
 Route::resource('mail/unseen','UnseenMessgController');
 Route::resource('mail','MailController');
+Route::post('/send/mail','SendMailController@index');
+Route::post('mail/reply/{inbox}','ReplyController@index');

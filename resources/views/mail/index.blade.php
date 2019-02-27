@@ -17,6 +17,7 @@
                                   <i style="color:red;" class="fa fa-chevron-down"></i>
                               </a>
                           </div>
+                          
                           <div class="inbox-body">
                               <a href="#myModal" data-toggle="modal"  title="Compose"    class="btn btn-compose">
                                   Compose
@@ -30,30 +31,26 @@
                                               <h4 class="modal-title">Compose</h4>
                                           </div>
                                           <div class="modal-body">
-                                              <form role="form" class="form-horizontal">
+                                              <form action="/send/mail" method="POST" role="form" class="form-horizontal">
+                                                @csrf
                                                   <div class="form-group">
                                                       <label class="col-lg-2 control-label">To</label>
                                                       <div class="col-lg-10">
-                                                          <input type="text" placeholder="" id="inputEmail1" class="form-control">
+                                                          <input name="to" type="text" placeholder="" id="inputEmail1" class="form-control">
                                                       </div>
                                                     
                                                   </div>
-                                                  <div class="form-group">
-                                                      <label class="col-lg-2 control-label">Cc / Bcc</label>
-                                                      <div class="col-lg-10">
-                                                          <input type="text" placeholder="" id="cc" class="form-control">
-                                                      </div>
-                                                  </div>
+                                                 
                                                   <div class="form-group">
                                                       <label class="col-lg-2 control-label">Subject</label>
                                                       <div class="col-lg-10">
-                                                          <input type="text" placeholder="" id="inputPassword1" class="form-control">
+                                                          <input name="subject" type="text" placeholder="" id="inputPassword1" class="form-control">
                                                       </div>
                                                   </div>
                                                   <div class="form-group">
                                                       <label class="col-lg-2 control-label">Message</label>
                                                       <div class="col-lg-10">
-                                                          <textarea rows="10" cols="30" class="form-control" id="" name=""></textarea>
+                                                          <textarea rows="10" cols="30" class="form-control" id="" name="message"></textarea>
                                                       </div>
                                                   </div>
     
@@ -146,28 +143,31 @@
                                 
                                  
                                  <div class="btn-group">
-                                     <a data-original-title="Refresh" data-placement="top" data-toggle="dropdown" href="#" class="btn mini tooltips">
+                                     <a data-original-title="Refresh" data-placement="top" data-toggle="dropdown" href="/mail" class="btn mini tooltips">
                                          <i class="fas fa-redo"></i>
                                      </a>
                                  </div>
                                  
                                  
-    
-                                 <ul class="unstyled inbox-pagination">
+                                 
+                                 <ul class="unstyled inbox-pagination btn">
                                      {{$mess_inbox->links()}}
                                  </ul>
+                             
                              </div>
+                             @include('layouts.validation')
                               <table class="table table-inbox table-hover">
                                 <tbody>
                                         <?php if($mess_inbox):?>
-                                        <?php  foreach($mess_inbox as $inbox):?>
                                         
+                                        <?php  foreach($mess_inbox as $inbox):?>
+                                        @if($unseen_message === $inbox->body)
                                   <tr class="unread">
                                       <td class="inbox-small-cells">
                                           <input type="checkbox" class="mail-checkbox">
                                       </td>
                                       <td class="inbox-small-cells"><i class="fa fa-star"></i></td>
-                                      <td class="view-message  dont-show"><a href='/mail/{{$inbox->id}}'><?php echo $inbox->fro_name; ?></a></td>
+                                      <td style="color: red;" class="view-message  dont-show"><a href='/mail/{{$inbox->id}}'><?php echo $inbox->fro_name; ?></a></td>
                                       <td class="view-message "> 
                                         <?php
                                             echo "<b>". $inbox->subject."</b> - <small>";
@@ -189,8 +189,39 @@
                                        <small> <?php echo $inbox->date;  ?></small>
                                     </td>
                                   </tr>
-                                        
-                                <?php endforeach; ?><?php endif;?>
+
+                                @else
+                                <tr class="unread">
+                                    <td class="inbox-small-cells">
+                                        <input type="checkbox" class="mail-checkbox">
+                                    </td>
+                                    <td class="inbox-small-cells"><i class="fa fa-star"></i></td>
+                                    <td class="view-message  dont-show"><a href='/mail/{{$inbox->id}}'><?php echo $inbox->fro_name; ?></a></td>
+                                    <td class="view-message "> 
+                                      <?php
+                                          echo "<b>". $inbox->subject."</b> - <small>";
+                                          if (strlen($inbox->body) > 50) {
+                                                  echo $inbox->fro."..";
+                                          }else{
+                                              echo $inbox->body;
+                                          }
+                                      ?>
+                                    </td>
+                                    <td class="view-message  inbox-small-cells">
+                                          @if($inbox->attachment > 0)
+                                              <i class="fa fa-paperclip"></i>
+                                          @else
+                                          @endif
+
+                                  </td>
+                                  <td class=" text-right">
+                                     <small> <?php echo $inbox->date;  ?></small>
+                                  </td>
+                                </tr>
+                  
+                                @endif
+                                <?php endforeach; ?>
+                                <?php endif;?>
                                   
                               </tbody>
                               </table>

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail;
 use Illuminate\Http\Request;
 use App\Imap;
 use App\Inbox;
 use DB;
+use App\UnseenMessg;
 
 class MailController extends Controller
 {
@@ -19,22 +19,36 @@ class MailController extends Controller
     
     public function index(Inbox $inbox)
     {
-       $email= new Imap();
+       $email= new Imap();  //All Messages
+       $email2= new UnseenMessg();  //Unseen Messages
        $inbox= null;
+       $inbox2= null;
+       //All Messages
        $connection= $email->connect(
         '{imap.gmail.com:993/imap/ssl}INBOX',   //Host Name
         'blessingcodephp@gmail.com',    //Username
         'Oyelamin'  //Password
        );
+       //Unseen Messages
+       $connection2= $email2->connect(
+        '{imap.gmail.com:993/imap/ssl}INBOX',   //Host Name
+        'blessingcodephp@gmail.com',    //Username
+        'Oyelamin'  //Password
+       );
+       //All Messages
        if($connection){
         
             //Inbox Array
             $inboxs= $email->getMessages('html');
 
         }
-        // dd($inboxs['data']);
-        // rsort($inboxs['data']);
-        // dd($inboxs);
+        if($connection2){
+        
+            //Inbox Array
+            $inboxs2= $email->getMessages('html');
+
+        }
+        //All Messages
         foreach($inboxs['data'] as $inbox){
             
             $subject= $inbox['subject'];
@@ -44,7 +58,7 @@ class MailController extends Controller
             $from_name= $inbox['from']['name'];
             $attachment= count($inbox['attachments']);
             
-            
+            //Store all Messages
            Inbox::create([
 
                'subject' => $subject,
@@ -62,12 +76,14 @@ class MailController extends Controller
            ]);
 
         }
-        $mess_inbox = DB::table('inboxes')->orderBy('id','desc')->groupBy('subject')->paginate(30);
-            // $inboxs= DB::select("SELECT * FROM `inboxes` GROUP BY `subject` ORDER BY `id` DESC");
-            
-        return view('mail.index')->with('mess_inbox',$mess_inbox);
 
-       
+    // }
+        foreach($inboxs2['data'] as $inbox){               
+            $unseen_message= $inbox['message'];
+            $mess_inbox = DB::table('inboxes')->orderBy('id','desc')->groupBy('date')->paginate(30);
+            return view('mail.index')->with('mess_inbox',$mess_inbox)->with('unseen_message',$unseen_message);
+
+        }
     }
 
     /**
@@ -137,11 +153,9 @@ class MailController extends Controller
      * @param  \App\Mail  $mail
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Mail $mail)
+    public function destroy(Inbox $inbox)
     {
-        //
+        $inbox->delete();
+        return redirect('/mail');
     }
 }
-/**
- * IBEJU 1, IBEJU 2, ORIMEDU 1, ORIMEDU 2, ORIMEDU 3, IWEREKUN 1, IWEREKUN 2, LEKKI 1,LEKKI 2, SIRIWON/IGBEKODO 1, SIRIWON/IGBEKODO 3
- */

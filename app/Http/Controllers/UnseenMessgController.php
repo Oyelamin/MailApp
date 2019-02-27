@@ -36,36 +36,36 @@ class UnseenMessgController extends Controller
         foreach($inboxs['data'] as $inbox){
             
             $subject= $inbox['subject'];
-            $message= $inbox['message'];
+            $unseen_message= $inbox['message'];
             $date= $inbox['date'];
             $from_address= $inbox['from']['address'];
             $from_name= $inbox['from']['name'];
             $attachment= count($inbox['attachments']);
+            return view('mail.index')->with('message',$unseen_message);
             
-            
-           Unseen::create([
+        //    Unseen::create([
 
-               'subject' => $subject,
+        //        'subject' => $subject,
 
-               'body' => $message,
+        //        'body' => $message,
 
-               'fro' => $from_address,
+        //        'fro' => $from_address,
 
-               'fro_name' => $from_name,
+        //        'fro_name' => $from_name,
 
-               'date' => $date,
+        //        'date' => $date,
 
-               'attachment' => $attachment
+        //        'attachment' => $attachment
 
-           ]);
+        //    ]);
         //    return dd("SAVED!!!");
          
         }
 
-        $mess_inbox = DB::table('unseens')->orderBy('id','asc')->groupBy('subject')->paginate(30);
+        // $mess_inbox = DB::table('unseens')->orderBy('id','asc')->groupBy('subject')->paginate(30);
             // $inboxs= DB::select("SELECT * FROM `inboxes` GROUP BY `subject` ORDER BY `id` DESC");
             
-        return view('mail.unseen')->with('mess_inbox',$mess_inbox);
+       
 
     }
 
